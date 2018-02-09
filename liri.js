@@ -1,14 +1,17 @@
 var dotenv = require("dotenv").config();
 var fs = require('fs');
 var request = require('request');
-var spotify = require('spotify');
+var Spotify = require('node-spotify-api');
 var Twitter = require('twitter');
 
-// var spotifyID = keys.spotify;
+
+
 
 // Get user input from terminal
 var liriCommand = process.argv[2];
 var liriData = process.argv[3];
+var inputArray=process.argv;
+
 
 // console.log(twitterID);
 // console.log(spotifyID);
@@ -19,16 +22,25 @@ var liriData = process.argv[3];
 // console.log(process.argv);
 
 // liri function to determine what process needs to be run
-function liri(liriCommand, liriData){
+function liri(liriCommand){
 
 
 	if (liriCommand==="my-tweets"){
-		twitter();
+		twitterRun();
 	}
 
-	// else if (liriCommand==="spotify-this-song"){
-	// 	spotify();
-	// }
+	else if (liriCommand==="spotify-this-song"){
+		var song="";
+		if (inputArray.length<4){
+			song="The Sign Ace of Base";
+			spotifyRun(song);
+		}
+		else{
+			song=liriData;
+			spotifyRun(song);
+		}
+		
+	}
 
 	// else if (liriCommand==="movie-this"){
 	// 	movie();
@@ -44,19 +56,22 @@ function liri(liriCommand, liriData){
 
 }
 
-function twitter(){
+// Function to access twitter and display necessary content
+function twitterRun(){
+	// Get the appropriate validation from twitter
 	var keys = require('./keys.js');
 	var twitterID = keys.twitter;
-	// console.log(twitterID.consumer_key);
 	var client = new Twitter({
         consumer_key: twitterID.consumer_key,
         consumer_secret: twitterID.consumer_secret,
         access_token_key: twitterID.access_token_key,
         access_token_secret: twitterID.access_token_secret
     });
-    console.log(client);
+
+    // Screen name of uses twitter account
 	var params = {Marveillesly: 'nodejs'};
 
+	// Access and display tweets
     client.get('statuses/user_timeline.json', params, function(error, tweets, response) {
         if (!error) {
             if (tweets.length < 20) {
@@ -77,9 +92,25 @@ function twitter(){
 
 }
 
-// function spotify(song){
+function spotifyRun(song){
+	var keys = require('./keys.js');
+	  var spotify = new Spotify(keys.spotify);
+    // Search for song 
+    spotify.search({ type: 'track', query: song }, function(error, response) {
 
-// }
+        // Display song details and show error if there is an error
+        if (!error) {
+            console.log('Artist Name: ' + response.tracks.items[0].artists[0].name);
+            console.log('Song Name: ' + response.tracks.items[0].name);
+            console.log('Preview URL: ' + response.tracks.items[0].preview_url);
+            console.log('Album Name: ' + response.tracks.items[0].album.name);
+        } else {
+            console.log('Error occurred: ' + error);
+        }
+    });
+
+
+}
 
 // function movie(){
 

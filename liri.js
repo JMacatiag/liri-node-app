@@ -10,7 +10,6 @@ var liriArgs = process.argv.slice(2);
 var liriCommand = liriArgs[0];
 var liriData = liriArgs[1];
 
-
 // console.log(liriArgs);
 // console.log(liriCommand);
 // console.log(liriData);
@@ -30,4 +29,14 @@ function liri(liriCommand){
 		movie();
 	}
 
+	else if (liriCommand==="do-what-it-says"){
+		doWhatItays();
+	}
+
+	else{
+		console.log("no command");
+	}
+
 }
+
+

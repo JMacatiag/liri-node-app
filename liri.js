@@ -42,9 +42,17 @@ function liri(liriCommand){
 		
 	}
 
-	// else if (liriCommand==="movie-this"){
-	// 	movie();
-	// }
+	else if (liriCommand==="movie-this"){
+		var movie="";
+		if (inputArray.length<4){
+			movie="Mr. Nobody.";
+			movieRun(movie);
+		}
+		else{
+			movie=liriData;
+			movieRun(movie);
+		}
+	}
 
 	// else if (liriCommand==="do-what-it-says"){
 	// 	doWhatItSays();
@@ -83,7 +91,7 @@ function twitterRun(){
             for (var i = 0; i < numberTweets; i++) {
                 console.log(tweets[i].created_at);
                 console.log(tweets[i].text);
-                console.log('-----------');
+                console.log('*******************');
             }
         } else {
             console.log('Error occurred: ' + error);
@@ -112,9 +120,28 @@ function spotifyRun(song){
 
 }
 
-// function movie(){
+function movieRun(movie){
 
-// }
+	// Search for movie
+	request("https://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy", function (error, response, body) {
+        // Display song details and show error if there is an error
+
+        if (!error && response.statusCode == 200) {
+        	body = JSON.parse(body);
+            console.log('Movie Title: ' + body.Title);
+            console.log('Year Released: ' + body.Released);
+            console.log('IMDB Rating: ' + body.Ratings[0].Value);
+            console.log('Rotten Tomatoes Rating: ' + body.Ratings[1].Value);
+            console.log('Production Country: ' + body.Country);
+            console.log('Language: ' + body.Language);
+            console.log('Plot: ' + body.Plot);
+            console.log('Actors: ' + body.Actors);
+        } 
+        else {
+            console.log('Error occurred: ' + error);
+        }
+    });
+}
 
 // function doWhatItSays(){
 

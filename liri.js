@@ -4,26 +4,12 @@ var request = require('request');
 var Spotify = require('node-spotify-api');
 var Twitter = require('twitter');
 
-
-
-
 // Get user input from terminal
 var liriCommand = process.argv[2];
 var liriData = process.argv[3];
 var inputArray=process.argv;
 
-
-// console.log(twitterID);
-// console.log(spotifyID);
-
-
-// console.log(liriCommand);
-// console.log(liriData);
-// console.log(process.argv);
-
-// liri function to determine what process needs to be run
 function liri(liriCommand){
-
 
 	if (liriCommand==="my-tweets"){
 		twitterRun();
@@ -54,13 +40,13 @@ function liri(liriCommand){
 		}
 	}
 
-	// else if (liriCommand==="do-what-it-says"){
-	// 	doWhatItSays();
-	// }
+	else if (liriCommand==="do-what-it-says"){
+		doWhatItSays();
+	}
 
-	// else{
-	// 	console.log("no command");
-	// }
+	else{
+		console.log("no command");
+	}
 
 }
 
@@ -116,8 +102,6 @@ function spotifyRun(song){
             console.log('Error occurred: ' + error);
         }
     });
-
-
 }
 
 function movieRun(movie){
@@ -143,9 +127,21 @@ function movieRun(movie){
     });
 }
 
-// function doWhatItSays(){
+function doWhatItSays(){
+	fs.readFile("random.txt", "utf8", function(error, data) {
 
-// }
+		// If the code experiences any errors it will log the error to the console.
+		if (error) {
+			return console.log(error);
+		}
 
-liri(liriCommand, liriData);
+		// We will then print the contents of data
+		console.log(data);
 
+		// Then split it by commas (to make it more readable)
+		var dataArr = data.split(",");
+
+	});
+}
+
+liri(liriCommand);

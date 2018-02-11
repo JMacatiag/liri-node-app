@@ -135,11 +135,24 @@ function doWhatItSays(){
 			return console.log(error);
 		}
 
-		// We will then print the contents of data
-		console.log(data);
-
-		// Then split it by commas (to make it more readable)
 		var dataArr = data.split(",");
+		// console.log(dataArr);
+		if (dataArr[0]==="spotify-this-song"){
+			spotifyRun(dataArr[1]);
+		}
+
+		if (dataArr[0]==="movie-this"){
+			movieRun(dataArr[1]);
+		}
+
+		if (dataArr[0]==="my-tweets"){
+			twitterRun();
+		}
+
+
+
+
+
 
 	});
 }

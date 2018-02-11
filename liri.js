@@ -9,41 +9,49 @@ var liriCommand = process.argv[2];
 var liriData = process.argv[3];
 var inputArray=process.argv;
 
+// Main function
 function liri(liriCommand){
-
+	// If command is my-tweets, run twitter function
 	if (liriCommand==="my-tweets"){
 		twitterRun();
 	}
 
+	// If command is spotify-this-song, run spotify function
 	else if (liriCommand==="spotify-this-song"){
 		var song="";
+		// If no song is given, default to The Sign by Ace of Base and run spotify function
 		if (inputArray.length<4){
 			song="The Sign Ace of Base";
 			spotifyRun(song);
 		}
+		// Run spotify function with user given song
 		else{
 			song=liriData;
 			spotifyRun(song);
 		}
-		
 	}
 
+	// If command is movie-this, run movie function
 	else if (liriCommand==="movie-this"){
 		var movie="";
+		// If no movie is given, default to Mr. Nobody
 		if (inputArray.length<4){
 			movie="Mr. Nobody.";
 			movieRun(movie);
 		}
+		// Run movie function with user given movie
 		else{
 			movie=liriData;
 			movieRun(movie);
 		}
 	}
 
+	// If command is dp-what-it-says, run doWhatItSays function
 	else if (liriCommand==="do-what-it-says"){
 		doWhatItSays();
 	}
 
+	// If no command is given display "no command"
 	else{
 		console.log("no command");
 	}
@@ -62,7 +70,7 @@ function twitterRun(){
         access_token_secret: twitterID.access_token_secret
     });
 
-    // Screen name of uses twitter account
+    // Screen name of user twitter account
 	var params = {Marveillesly: 'nodejs'};
 
 	// Access and display tweets
@@ -86,9 +94,11 @@ function twitterRun(){
 
 }
 
+// Function to access spotify and display necessary content
 function spotifyRun(song){
+	// Get spotify validation information
 	var keys = require('./keys.js');
-	  var spotify = new Spotify(keys.spotify);
+	var spotify = new Spotify(keys.spotify);
     // Search for song 
     spotify.search({ type: 'track', query: song }, function(error, response) {
 
@@ -104,12 +114,11 @@ function spotifyRun(song){
     });
 }
 
+// Function to access OMDB and display necessary content
 function movieRun(movie){
-
 	// Search for movie
 	request("https://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy", function (error, response, body) {
         // Display song details and show error if there is an error
-
         if (!error && response.statusCode == 200) {
         	body = JSON.parse(body);
             console.log('Movie Title: ' + body.Title);
@@ -127,16 +136,17 @@ function movieRun(movie){
     });
 }
 
+// Function to access the random.txt file and display necessary content using details within the file
 function doWhatItSays(){
+	// Read the random.txt file and take the necessary information
 	fs.readFile("random.txt", "utf8", function(error, data) {
-
 		// If the code experiences any errors it will log the error to the console.
 		if (error) {
 			return console.log(error);
 		}
-
+		// Split the contents of random.txt into command and user input
 		var dataArr = data.split(",");
-		// console.log(dataArr);
+		// Run necessary function that correspond to what is provided in random.txt
 		if (dataArr[0]==="spotify-this-song"){
 			spotifyRun(dataArr[1]);
 		}
@@ -148,13 +158,8 @@ function doWhatItSays(){
 		if (dataArr[0]==="my-tweets"){
 			twitterRun();
 		}
-
-
-
-
-
-
 	});
 }
 
+// Run liri
 liri(liriCommand);
